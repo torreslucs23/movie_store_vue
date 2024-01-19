@@ -2,8 +2,16 @@
   <router-view></router-view>
 </template>
 
-<style scoped>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: sans-serif;
+}
+
 body {
-  background-color: black;
+  margin: 0;
 }
 </style>

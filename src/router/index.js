@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import AuthPage from "../components/AuthPage.vue";
+import AuthPage from "../components/pages/AuthPage.vue";
+import HomePage from "../components/pages/HomePage.vue";
 
 const routes = [
   {
@@ -10,6 +11,11 @@ const routes = [
     name: "auth",
     path: "/auth",
     component: AuthPage,
+  },
+  {
+    name: "home",
+    path: "/home",
+    component: HomePage,
   },
 ];
 

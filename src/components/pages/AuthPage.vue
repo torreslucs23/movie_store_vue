@@ -1,6 +1,9 @@
 <template>
   <form @submit.prevent="submitForm">
-    <h1>Login Authentication</h1>
+    <p v-if="erroAuth">
+      Erro ao autenticar-se. Por favor, insira os dados novamente
+    </p>
+    <h1>Entrar</h1>
     <div class="form-control">
       <label for="user-name">Username</label>
       <input
@@ -21,11 +24,9 @@
       />
     </div>
     <div>
-      <button>Login</button>
+      <button @submit="submitForm">login</button>
     </div>
   </form>
-
-  <button @click="getMovie">movie</button>
 </template>
 
 <script>
@@ -35,7 +36,7 @@ export default {
     return {
       userName: "",
       password: "",
-      responseData: null,
+      erroAuth: false,
     };
   },
   methods: {
@@ -58,17 +59,30 @@ export default {
           }
         )
         .then((response) => {
-          console.log(response.data);
+          localStorage.setItem("token", response.data);
+          console.log(localStorage.getItem("token"));
+          this.erroAuth = false;
         })
         .catch((error) => {
           console.log("Erro na autenticação", error.response);
+          this.erroAuth = true;
         });
     },
+  },
+  created() {
+    const token = localStorage.getItem("token");
+    if (token) {
+      this.$router.push("/home");
+    }
   },
 };
 </script>
 
 <style scoped>
+p {
+  color: red;
+  font-size: 20px;
+}
 h1 {
   font-weight: bold;
 }
