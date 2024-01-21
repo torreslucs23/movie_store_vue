@@ -57,8 +57,9 @@ export default {
           }
         )
         .then((response) => {
-          localStorage.setItem("token", response.data);
-          console.log(localStorage.getItem("token"));
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("username", response.data.username);
+          localStorage.setItem("idUser", response.data.id);
           this.erroAuth = false;
           this.$router.push("/home");
         })

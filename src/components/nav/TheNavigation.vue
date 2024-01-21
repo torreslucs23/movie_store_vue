@@ -20,6 +20,8 @@ export default {
     logout() {
       if (localStorage.getItem("token")) {
         localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        localStorage.removeItem("idUser");
         this.$router.push("/auth");
       }
     },
