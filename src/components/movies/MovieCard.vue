@@ -5,12 +5,25 @@
     <p>{{ year }}</p>
     <p v-if="meanRating">Avaliação média: {{ meanRating }}</p>
     <p v-else>Este filme não possui avaliações</p>
+    <rating-card :rating="rating" :movieId="id"></rating-card>
   </section>
 </template>
 
 <script>
+import RatingCard from "./RatingCard.vue";
 export default {
-  props: ["name", "director", "year", "meanRating"],
+  props: ["id", "name", "director", "year", "meanRating"],
+
+  components: {
+    RatingCard,
+  },
+  data() {
+    return {
+      idReview: null,
+      rating: 0,
+    };
+  },
+  methods: {},
 };
 </script>
 

@@ -1,8 +1,6 @@
 <template>
   <form @submit.prevent="submitForm">
-    <p v-if="erroAuth">
-      Erro ao autenticar-se. Por favor, insira os dados novamente
-    </p>
+    <p v-if="erroAuth">Erro na autenticação. Insira os dados novamente</p>
     <h1>Entrar</h1>
     <div class="form-control">
       <label for="user-name">Username</label>
@@ -59,9 +57,11 @@ export default {
           }
         )
         .then((response) => {
-          localStorage.setItem("token", response.data);
-          console.log(localStorage.getItem("token"));
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("username", response.data.username);
+          localStorage.setItem("idUser", response.data.id);
           this.erroAuth = false;
+          this.$router.push("/home");
         })
         .catch((error) => {
           console.log("Erro na autenticação", error.response);

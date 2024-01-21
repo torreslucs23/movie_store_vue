@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import AuthPage from "../components/pages/AuthPage.vue";
 import HomePage from "../components/pages/HomePage.vue";
+import NotFound from "../components/pages/NotFound.vue";
 
 const routes = [
   {
@@ -15,8 +16,9 @@ const routes = [
   {
     name: "home",
     path: "/home",
-    component: HomePage,
+    components: { default: HomePage, notFound: NotFound },
   },
+  { path: "/:notFound(.*)", component: NotFound },
 ];
 
 const router = createRouter({
