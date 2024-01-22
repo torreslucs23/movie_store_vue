@@ -48,3 +48,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+p {
+  display: flex;
+  justify-content: center;
+  font-size: 2rem;
+}
+</style>

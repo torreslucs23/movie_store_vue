@@ -1,6 +1,6 @@
 <template>
+  <the-navigation></the-navigation>
   <div>
-    <label for="movies-list"> These are all movies </label>
     <movies-list></movies-list>
   </div>
 </template>

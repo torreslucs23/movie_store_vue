@@ -6,6 +6,7 @@
     <p v-if="meanRating">Avaliação média: {{ meanRating }}</p>
     <p v-else>Este filme não possui avaliações</p>
     <rating-card :rating="rating" :movieId="id"></rating-card>
+    <button @click="deleteMovie">apagar</button>
   </section>
 </template>
 
@@ -21,9 +22,18 @@ export default {
     return {
       idReview: null,
       rating: 0,
+      showModal: false,
     };
   },
-  methods: {},
+  methods: {
+    deleteMovie() {
+      console.log("aqui");
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
+  },
 };
 </script>
 
@@ -70,5 +80,36 @@ p {
   font-size: 14px;
 }
 
-/* Adicione estilos específicos conforme necessário */
+button {
+  display: flex;
+  justify-content: right;
+  background-color: #ff5252;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #ff0000;
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.confirmation-modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
 </style>

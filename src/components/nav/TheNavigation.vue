@@ -3,10 +3,13 @@
     <nav>
       <ul>
         <li>
+          <p>{{ username }}</p>
+        </li>
+        <li>
           <router-link to="/home">Home</router-link>
         </li>
         <li>
-          <router-link to="/users">Add Movie</router-link>
+          <router-link to="/movie">Add Movie</router-link>
         </li>
         <button @click="logout">Logout</button>
       </ul>
@@ -16,6 +19,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      username: localStorage.getItem("username"),
+    };
+  },
   methods: {
     logout() {
       if (localStorage.getItem("token")) {
@@ -30,6 +38,9 @@ export default {
 </script>
 
 <style scoped>
+p {
+  color: white;
+}
 header {
   width: 100%;
   height: 5rem;

@@ -1,5 +1,4 @@
 <template>
-  <the-navigation v-if="isAuthenticated"></the-navigation>
   <router-view></router-view>
 </template>
 
