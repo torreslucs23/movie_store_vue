@@ -1,4 +1,13 @@
 <template>
+  <base-dialog v-if="showModal" title="apagar filme" @close="closeModal">
+    <template #default>
+      <p>Tem certeza que quer excluir esse filme?</p>
+    </template>
+    <template #actions>
+      <button @click="confirmDelete">Sim</button>
+      <button @click="closeModal">não</button>
+    </template>
+  </base-dialog>
   <section>
     <h2>{{ name }}</h2>
     <h3>{{ director }}</h3>
@@ -11,6 +20,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import RatingCard from "./RatingCard.vue";
 export default {
   props: ["id", "name", "director", "year", "meanRating"],
@@ -18,6 +28,7 @@ export default {
   components: {
     RatingCard,
   },
+  emits: ["deleteMovie"],
   data() {
     return {
       idReview: null,
@@ -32,6 +43,21 @@ export default {
     },
     closeModal() {
       this.showModal = false;
+    },
+    confirmDelete() {
+      this.showModal = false;
+      axios
+        .delete("http://localhost:8080/movies/" + this.id, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then(() => {
+          this.$emit("deleteMovie", this.id);
+        })
+        .catch((error) => {
+          console.log("erro deletar", error);
+        });
     },
   },
 };

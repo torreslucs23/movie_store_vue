@@ -4,8 +4,9 @@
     <div>
       <ul>
         <movie-card
+          @deleteMovie="deleteMovie"
           v-for="movie in movies"
-          :key="movie"
+          :key="movie.id"
           :id="movie.id"
           :name="movie.name"
           :director="movie.director"
@@ -30,6 +31,12 @@ export default {
       isLoading: "carregando",
     };
   },
+  methods: {
+    deleteMovie(value) {
+      const resIndex = this.movies.findIndex((res) => res.id === value);
+      this.movies.splice(resIndex, 1);
+    },
+  },
 
   created() {
     axios
@@ -41,6 +48,7 @@ export default {
       .then((response) => {
         this.movies = response.data;
         this.isLoading = "ok";
+        console.log(this.movies);
       })
       .catch((error) => {
         console.error(error);
