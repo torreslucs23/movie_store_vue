@@ -14,12 +14,20 @@
 
     <div class="form-control">
       <label for="password">Password</label>
-      <input
-        id="password"
-        name="password"
-        type="password"
-        v-model.trim="password"
-      />
+      <div class="div-password-container">
+        <input
+          id="password"
+          name="password"
+          :type="typePassword"
+          v-model.trim="password"
+        />
+        <img
+          @mouseover="showPassword"
+          @mouseleave="hidePassword"
+          src="../../assets/olho.png"
+          alt=""
+        />
+      </div>
     </div>
     <div>
       <button @submit="submitForm">login</button>
@@ -35,6 +43,7 @@ export default {
       userName: "",
       password: "",
       erroAuth: false,
+      typePassword: "password",
     };
   },
   methods: {
@@ -67,6 +76,12 @@ export default {
           console.log("Erro na autenticação", error.response);
           this.erroAuth = true;
         });
+    },
+    showPassword() {
+      this.typePassword = "text";
+    },
+    hidePassword() {
+      this.typePassword = "password";
     },
   },
   created() {
@@ -104,6 +119,10 @@ form {
   flex-direction: column;
   align-items: center;
 }
+img {
+  width: 7%;
+  margin: 5px;
+}
 
 label {
   font-weight: bold;
@@ -113,7 +132,7 @@ label {
 
 input {
   display: flex;
-  width: 60%;
+  width: 7rem;
   font: inherit;
   margin-top: 0.5rem;
   align-self: center;
@@ -135,5 +154,12 @@ button:hover,
 button:active {
   border-color: #002350;
   background-color: #002350;
+}
+
+.div-password-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* Garante que a largura seja 100% do container pai */
 }
 </style>

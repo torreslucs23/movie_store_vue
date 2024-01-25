@@ -1,6 +1,7 @@
 <template>
   <section>
     <p v-if="isLoading === 'carregando'">carregando...</p>
+    <p v-if="notFound">Nenhum filme encontrado</p>
     <div>
       <ul>
         <movie-card
@@ -25,11 +26,45 @@ export default {
   components: {
     MovieCard,
   },
+  props: ["searchedMovies"],
   data() {
     return {
       movies: [],
       isLoading: "carregando",
+      notFound: false,
     };
+  },
+  watch: {
+    searchedMovies() {
+      if (
+        this.searchedMovies.movies.length === 0 &&
+        this.searchedMovies.isEmpty === true
+      ) {
+        axios
+          .get("http://localhost:8080/movies", {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          })
+          .then((response) => {
+            this.movies = response.data;
+            this.isLoading = "ok";
+            console.log(this.movies);
+            this.notFound = false;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        if (this.searchedMovies.movies.length === 0) {
+          this.notFound = true;
+          this.movies = [];
+        } else {
+          this.movies = this.searchedMovies.movies;
+          this.notFound = false;
+        }
+      }
+    },
   },
   methods: {
     deleteMovie(value) {
@@ -39,20 +74,25 @@ export default {
   },
 
   created() {
-    axios
-      .get("http://localhost:8080/movies", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      })
-      .then((response) => {
-        this.movies = response.data;
-        this.isLoading = "ok";
-        console.log(this.movies);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (this.searchedMovies.movies.length === 0) {
+      axios
+        .get("http://localhost:8080/movies", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then((response) => {
+          this.movies = response.data;
+          this.isLoading = "ok";
+          console.log(this.movies);
+          this.notFound = false;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      this.movies = this.searchedMovies.movies;
+    }
   },
 };
 </script>
