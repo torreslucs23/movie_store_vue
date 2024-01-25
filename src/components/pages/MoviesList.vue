@@ -49,7 +49,6 @@ export default {
           .then((response) => {
             this.movies = response.data;
             this.isLoading = "ok";
-            console.log(this.movies);
             this.notFound = false;
           })
           .catch((error) => {
@@ -84,7 +83,6 @@ export default {
         .then((response) => {
           this.movies = response.data;
           this.isLoading = "ok";
-          console.log(this.movies);
           this.notFound = false;
         })
         .catch((error) => {

@@ -21,7 +21,6 @@ export default {
   },
   methods: {
     async search() {
-      console.log(this.input);
       try {
         await this.$nextTick();
         if (this.input === "") {

@@ -57,7 +57,6 @@ export default {
       if (this.yearMovie < 1900 || this.yearMovie > 2100) {
         this.yearCheckError = true;
       } else {
-        console.log();
         axios
           .post(
             "http://localhost:8080/movies",

@@ -1,38 +1,43 @@
 <template>
-  <form @submit.prevent="submitForm">
-    <p v-if="erroAuth">Erro na autenticação. Insira os dados novamente</p>
-    <h1>Entrar</h1>
-    <div class="form-control">
-      <label for="user-name">Username</label>
-      <input
-        id="user-name"
-        name="user-name"
-        type="text"
-        v-model.trim="userName"
-      />
-    </div>
-
-    <div class="form-control">
-      <label for="password">Password</label>
-      <div class="div-password-container">
+  <div>
+    <form @submit.prevent="submitForm">
+      <p v-if="erroAuth">Erro na autenticação. Insira os dados novamente</p>
+      <h1>Entrar</h1>
+      <div class="form-control">
+        <label for="user-name">Username</label>
         <input
-          id="password"
-          name="password"
-          :type="typePassword"
-          v-model.trim="password"
-        />
-        <img
-          @mouseover="showPassword"
-          @mouseleave="hidePassword"
-          src="../../assets/olho.png"
-          alt=""
+          id="user-name"
+          name="user-name"
+          type="text"
+          v-model.trim="userName"
         />
       </div>
-    </div>
-    <div>
-      <button @submit="submitForm">login</button>
-    </div>
-  </form>
+
+      <div class="form-control">
+        <label for="password">Password</label>
+        <div class="div-password-container">
+          <input
+            id="password"
+            name="password"
+            :type="typePassword"
+            v-model.trim="password"
+          />
+          <img
+            @mouseover="showPassword"
+            @mouseleave="hidePassword"
+            src="../../assets/olho.png"
+            alt=""
+          />
+        </div>
+      </div>
+      <div>
+        <button @submit="submitForm">login</button>
+        <button @click="$router.push('/register')" class="register-button">
+          Registrar-se
+        </button>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -148,6 +153,7 @@ button {
   border-radius: 30px;
   margin-top: 0.5rem;
   align-self: center;
+  width: 100%;
 }
 
 button:hover,
@@ -161,5 +167,16 @@ button:active {
   align-items: center;
   justify-content: center;
   width: 100%; /* Garante que a largura seja 100% do container pai */
+}
+
+.register-button {
+  background-color: rgb(184, 117, 117);
+  border: red;
+}
+
+.register-button:hover,
+.register-button:active {
+  border-color: red;
+  background-color: red;
 }
 </style>

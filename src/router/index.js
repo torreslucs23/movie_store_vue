@@ -3,6 +3,7 @@ import AuthPage from "../components/pages/AuthPage.vue";
 import HomePage from "../components/pages/HomePage.vue";
 import NotFound from "../components/pages/NotFound.vue";
 import AddMovie from "../components/pages/AddMovie.vue";
+import RegisterUser from "../components/pages/RegisterUser.vue";
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: "/movie",
     components: { default: AddMovie, notFound: NotFound },
   },
+  {
+    name: "register",
+    path: "/register",
+    component: RegisterUser,
+  },
   { path: "/:notFound(.*)", component: NotFound },
 ];
 
@@ -32,7 +38,12 @@ const router = createRouter({
   routes,
 });
 router.beforeEach((to, from, next) => {
-  if (to.path === "/auth" || from.path === "/auth") {
+  if (
+    to.path === "/auth" ||
+    from.path === "/auth" ||
+    to.path === "/register" ||
+    from.path === "/register"
+  ) {
     next();
   }
   const token = localStorage.getItem("token");
