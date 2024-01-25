@@ -13,21 +13,23 @@
         />
       </div>
 
-      <div class="form-control">
-        <label for="password">Password</label>
-        <div class="div-password-container">
-          <input
-            id="password"
-            name="password"
-            :type="typePassword"
-            v-model.trim="password"
-          />
-          <img
-            @mouseover="showPassword"
-            @mouseleave="hidePassword"
-            src="../../assets/olho.png"
-            alt=""
-          />
+      <div class="password-container">
+        <div class="form-control">
+          <label for="password">Password</label>
+          <div class="div-password-container">
+            <input
+              id="password"
+              name="password"
+              :type="typePassword"
+              v-model.trim="password"
+            />
+            <img
+              @mouseover="showPassword"
+              @mouseleave="hidePassword"
+              src="../../assets/olho.png"
+              class="eye"
+            />
+          </div>
         </div>
       </div>
       <div>
@@ -53,7 +55,6 @@ export default {
   },
   methods: {
     submitForm() {
-      console.log(this.password);
       axios
         .post(
           "http://localhost:8080/user/login",
@@ -167,6 +168,15 @@ button:active {
   align-items: center;
   justify-content: center;
   width: 100%; /* Garante que a largura seja 100% do container pai */
+}
+.eye {
+  position: absolute;
+  right: 1px;
+  cursor: pointer;
+  width: 1rem;
+}
+.password-container {
+  position: relative;
 }
 
 .register-button {
