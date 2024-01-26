@@ -12,7 +12,7 @@
     <h2>{{ name }}</h2>
     <h3>{{ director }}</h3>
     <p>{{ year }}</p>
-    <p v-if="meanRating">Avaliação média: {{ meanRating }}</p>
+    <p v-if="meanRating">Avaliação média: {{ meanRating.toFixed(1) }}</p>
     <p v-else>Este filme não possui avaliações</p>
     <rating-card :rating="rating" :movieId="id"></rating-card>
     <button @click="deleteMovie">apagar</button>
