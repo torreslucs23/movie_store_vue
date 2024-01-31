@@ -8,6 +8,12 @@
       <button @click="closeModal">não</button>
     </template>
   </base-dialog>
+
+  <base-dialog v-if="deletedMovie">
+    <template #default>
+      <p class="deleted">filme {{ this.name }} deletado com sucesso</p>
+    </template>
+  </base-dialog>
   <section>
     <h2>{{ name }}</h2>
     <h3>{{ director }}</h3>
@@ -15,6 +21,9 @@
     <p v-if="meanRating">Avaliação média: {{ meanRating.toFixed(1) }}</p>
     <p v-else>Este filme não possui avaliações</p>
     <rating-card :rating="rating" :movieId="id"></rating-card>
+    <router-link :to="'/movie/' + this.id" class="button-edit"
+      >Editar</router-link
+    >
     <button @click="deleteMovie">apagar</button>
   </section>
 </template>
@@ -34,12 +43,24 @@ export default {
       idReview: null,
       rating: 0,
       showModal: false,
+      deletedMovie: false,
     };
   },
   methods: {
     deleteMovie() {
-      console.log("aqui");
       this.showModal = true;
+    },
+    editMovie() {
+      this.$router.push({
+        name: "/movie",
+        props: {
+          id: this.id,
+          name: this.name,
+          director: this.director,
+          year: this.year,
+        },
+        params: { id: this.id },
+      });
     },
     closeModal() {
       this.showModal = false;
@@ -53,7 +74,12 @@ export default {
           },
         })
         .then(() => {
-          this.$emit("deleteMovie", this.id);
+          this.deletedMovie = true;
+          console.log(this.deletedMovie);
+          setTimeout(() => {
+            this.deletedMovie = false;
+            this.$emit("deleteMovie", this.id);
+          }, 2000);
         })
         .catch((error) => {
           console.log("erro deletar", error);
@@ -70,6 +96,11 @@ section {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   padding: 1rem;
   border-radius: 12px;
+}
+.deleted {
+  color: black;
+  font-size: 1.5rem;
+  text-align: center;
 }
 
 ul {
@@ -106,15 +137,26 @@ p {
   font-size: 14px;
 }
 
-button {
+button,
+.button-edit {
   display: flex;
-  justify-content: right;
+  justify-content: center;
   background-color: #ff5252;
   color: #fff;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin: 2px;
+}
+.button-edit {
+  max-width: 5rem;
+  text-decoration: none;
+  background-color: rgb(45, 93, 93);
+}
+
+.button-edit:hover {
+  background-color: rgb(2, 15, 15);
 }
 button:hover {
   background-color: #ff0000;

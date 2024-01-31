@@ -1,23 +1,10 @@
 <template>
-  <base-dialog v-if="sucess">
-    <template #default>
-      <p class="sucess">Filme criado com sucesso!</p>
-    </template>
-  </base-dialog>
   <the-navigation></the-navigation>
-  <h2>Adicione um novo filme</h2>
-
+  <h1>Edit movie</h1>
   <form @submit.prevent="submitForm">
     <p v-if="createMovieCheck">Erro ao criar o filme. Tente novamente</p>
-    <div class="form-control">
-      <label for="movie-name">Nome do filme</label>
-      <input
-        id="movie-name"
-        name="movie-name"
-        type="text"
-        v-model.trim="movieName"
-      />
-    </div>
+
+    <h2>{{ movie.name }}</h2>
 
     <div class="form-control">
       <label for="director">Diretor</label>
@@ -25,7 +12,7 @@
         id="director"
         name="director"
         type="text"
-        v-model.trim="director"
+        v-model.trim="movie.director"
       />
     </div>
     <p v-if="yearCheckError">Data inválida.</p>
@@ -37,7 +24,7 @@
         type="number"
         min="1900"
         max="2100"
-        v-model.trim="yearMovie"
+        v-model.trim="movie.year"
       />
     </div>
     <button @submit="submitForm">Criar</button>
@@ -49,52 +36,20 @@ import axios from "axios";
 export default {
   data() {
     return {
-      movieName: "",
-      director: "",
-      yearMovie: null,
-      yearCheckError: false,
-      createMovieCheck: false,
-      sucess: false,
+      movie: {},
     };
   },
-
-  methods: {
-    submitForm() {
-      if (this.yearMovie < 1900 || this.yearMovie > 2100) {
-        this.yearCheckError = true;
-      } else {
-        axios
-          .post(
-            "http://localhost:8080/movies",
-            {
-              name: this.movieName,
-              director: this.director,
-              year: this.yearMovie,
-            },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("token"),
-              },
-            }
-          )
-          .then(() => {
-            this.movieName = "";
-            this.director = "";
-            this.year = null;
-            this.yearCheckError = false;
-            this.createMovieCheck = false;
-            this.sucess = true;
-            setTimeout(() => {
-              this.sucess = false;
-              this.$router.push("/home");
-            }, 2000);
-          })
-          .catch(() => {
-            this.createMovieCheck = true;
-          });
-      }
-    },
+  mounted() {
+    const idMovie = this.$route.params.id;
+    axios
+      .get("http://localhost:8080/movies/" + idMovie, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        this.movie = response.data;
+      });
   },
 };
 </script>

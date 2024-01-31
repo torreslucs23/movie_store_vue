@@ -4,6 +4,7 @@ import HomePage from "../components/pages/HomePage.vue";
 import NotFound from "../components/pages/NotFound.vue";
 import AddMovie from "../components/pages/AddMovie.vue";
 import RegisterUser from "../components/pages/RegisterUser.vue";
+import EditMovie from "../components/pages/EditMovie.vue";
 
 const routes = [
   {
@@ -29,6 +30,11 @@ const routes = [
     name: "register",
     path: "/register",
     component: RegisterUser,
+  },
+  {
+    name: "movie",
+    path: "/movie/:id",
+    components: { default: EditMovie, notFound: NotFound },
   },
   { path: "/:notFound(.*)", component: NotFound },
 ];

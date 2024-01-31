@@ -102,7 +102,7 @@ export default {
 <style scoped>
 p {
   color: red;
-  font-size: 20px;
+  font-size: 15px;
 }
 h1 {
   font-weight: bold;

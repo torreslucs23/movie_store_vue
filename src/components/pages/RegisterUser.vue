@@ -1,8 +1,13 @@
 <template>
   <div>
+    <base-dialog v-if="createdUser">
+      <template #default>
+        <p class="sucess">Usuário criado com sucesso!</p>
+      </template>
+    </base-dialog>
     <form @submit.prevent="submitForm">
       <p v-if="errorRegister">
-        Erro ao regisstrar-se. Use outro nome de usuario ou tente mais tarde.
+        Erro ao registrar-se. Use outro nome de usuario ou tente mais tarde.
       </p>
       <h2>Registrar-se</h2>
       <div class="form-control">
@@ -63,25 +68,41 @@ export default {
       pass1CheckSpecial: true,
       equalPasswords: true,
       errorRegister: false,
+      createdUser: false,
     };
   },
   methods: {
     submitForm() {
-      axios
-        .post("http://localhost:8080/user", {
-          username: this.userName,
-          password: this.password1,
-        })
-        .then(() => {
-          this.userName = "";
-          this.password1 = "";
-          this.password2 = "";
-          this.errorRegister = false;
-          this.$router.push("/auth");
-        })
-        .catch(() => {
-          this.errorRegister = true;
-        });
+      if (
+        this.userName &&
+        this.password1 &&
+        this.password2 &&
+        this.pass1CheckLength &&
+        this.pass1CheckSpecial &&
+        this.equalPasswords
+      ) {
+        axios
+          .post("http://localhost:8080/user", {
+            username: this.userName,
+            password: this.password1,
+          })
+          .then(() => {
+            this.userName = "";
+            this.password1 = "";
+            this.password2 = "";
+            this.errorRegister = false;
+            this.createdUser = true;
+            setTimeout(() => {
+              this.createdUser = false;
+              this.$router.push("/auth");
+            }, 2000);
+          })
+          .catch(() => {
+            this.errorRegister = true;
+          });
+      } else {
+        this.errorRegister = true;
+      }
     },
     checkLengthPassword() {
       if (this.password1.length < 6 && this.password1 != "") {
@@ -120,6 +141,11 @@ export default {
 p {
   color: red;
   font-size: 10px;
+}
+.sucess {
+  color: black;
+  font-size: 1.5rem;
+  text-align: center;
 }
 h1 {
   font-weight: bold;

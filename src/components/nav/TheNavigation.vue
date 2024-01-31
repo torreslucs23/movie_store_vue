@@ -1,4 +1,9 @@
 <template>
+  <base-dialog v-if="isLogout">
+    <template #default>
+      <p class="logout">Você deslogou</p>
+    </template>
+  </base-dialog>
   <header>
     <nav>
       <ul>
@@ -22,6 +27,7 @@ export default {
   data() {
     return {
       username: localStorage.getItem("username"),
+      isLogout: false,
     };
   },
   methods: {
@@ -30,7 +36,11 @@ export default {
         localStorage.removeItem("token");
         localStorage.removeItem("username");
         localStorage.removeItem("idUser");
-        this.$router.push("/auth");
+        this.isLogout = true;
+        setTimeout(() => {
+          this.logout = false;
+          this.$router.push("/auth");
+        }, 2000);
       }
     },
   },
@@ -40,6 +50,11 @@ export default {
 <style scoped>
 p {
   color: white;
+}
+.logout {
+  text-align: center;
+  font-size: 1.5rem;
+  color: black;
 }
 header {
   width: 100%;

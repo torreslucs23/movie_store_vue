@@ -11,9 +11,7 @@
         <slot></slot>
       </section>
       <menu>
-        <slot name="actions">
-          <button @click="$emit('close')">Close</button>
-        </slot>
+        <slot name="actions"> </slot>
       </menu>
     </dialog>
   </teleport>
