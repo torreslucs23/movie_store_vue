@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "../../api.js";
 export default {
   data() {
     return {
@@ -54,82 +54,24 @@ export default {
         // this.$emit("send-rating", this.star);
       }
 
-      axios
-        .post(
-          "http://localhost:8080/reviews",
-          {
-            movieId: this.movieId,
-            userId: localStorage.getItem("idUser"),
-            rating: this.star,
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token"),
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then(() => {
-          console.log("ok");
-        })
+      api
+        .postReview(this.movieId, localStorage.getItem("idUser"), this.star)
+        .then(() => {})
         .catch(() => {
-          axios.put(
-            "http://localhost:8080/reviews/" + this.idReview,
-            {
-              movieId: this.movieId,
-              userId: localStorage.getItem("idUser"),
-              rating: this.star,
-            },
-            {
-              headers: {
-                Authorization: "Bearer " + localStorage.getItem("token"),
-                "Content-Type": "application/json",
-              },
-            }
-          );
-        })
-        .then(() => {
-          console.log("ok2");
+          api
+            .putReview(
+              this.idReview,
+              this.movieId,
+              localStorage.getItem("idUser"),
+              this.star
+            )
+            .then(() => {});
         });
     },
-    // newRating(value) {
-    //   console.log(value);
-    //   console.log(this.id);
-    //   axios
-    //     .post(
-    //       "http://localhost:8080/reviews",
-    //       {
-    //         movieId: this.id,
-    //         userId: localStorage.getItem("idUser"),
-    //         rating: value,
-    //       },
-    //       {
-    //         headers: {
-    //           Authorization: "Bearer " + localStorage.getItem("token"),
-    //           "Content-Type": "application/json",
-    //         },
-    //       }
-    //     )
-    //     .then(() => {
-    //       console.log(".");
-    //     })
-    //     .catch(() => {
-    //       console.log("s");
-    //     });
   },
   created() {
-    axios
-      .get(
-        "http://localhost:8080/reviews/" +
-          this.movieId +
-          "/user/" +
-          localStorage.getItem("idUser"),
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        }
-      )
+    api
+      .getUserReview(this.movieId, localStorage.getItem("idUser"))
       .then((response) => {
         this.idReview = response.data.id;
         this.star = parseInt(response.data.rating, 10);

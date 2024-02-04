@@ -22,8 +22,8 @@ const routes = [
     components: { default: HomePage, notFound: NotFound },
   },
   {
-    name: "movie",
-    path: "/movie",
+    name: "addMovie",
+    path: "/addMovie",
     components: { default: AddMovie, notFound: NotFound },
   },
   {

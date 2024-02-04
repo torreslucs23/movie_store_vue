@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "../../api.js";
 export default {
   data() {
     return {
@@ -55,32 +55,23 @@ export default {
   },
   methods: {
     submitForm() {
-      axios
-        .post(
-          "http://localhost:8080/user/login",
-          {
-            username: this.userName,
-            password: this.password,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              //   "Access-Control-Allow-Origin": "*",
+      const userData = {
+        username: this.userName,
+        password: this.password,
+      };
 
-              Accept: "*/*",
-            },
-          }
-        )
+      api
+        .loginUser(userData)
         .then((response) => {
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("username", response.data.username);
           localStorage.setItem("idUser", response.data.id);
-          this.erroAuth = false;
+          this.authError = false;
           this.$router.push("/home");
         })
         .catch((error) => {
           console.log("Erro na autenticação", error.response);
-          this.erroAuth = true;
+          this.authError = true;
         });
     },
     showPassword() {

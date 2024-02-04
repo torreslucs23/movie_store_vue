@@ -1,38 +1,41 @@
 <template>
-  <base-dialog v-if="showModal" title="apagar filme" @close="closeModal">
-    <template #default>
-      <p>Tem certeza que quer excluir esse filme?</p>
-    </template>
-    <template #actions>
-      <button @click="confirmDelete">Sim</button>
-      <button @click="closeModal">não</button>
-    </template>
-  </base-dialog>
+  <div>
+    <base-dialog v-if="showModal" title="apagar filme" @close="closeModal">
+      <template #default>
+        <p>Tem certeza que quer excluir esse filme?</p>
+      </template>
+      <template #actions>
+        <button @click="confirmDelete">Sim</button>
+        <button @click="closeModal">não</button>
+      </template>
+    </base-dialog>
 
-  <base-dialog v-if="deletedMovie">
-    <template #default>
-      <p class="deleted">filme {{ this.name }} deletado com sucesso</p>
-    </template>
-  </base-dialog>
-  <section>
-    <h2>{{ name }}</h2>
-    <h3>{{ director }}</h3>
-    <p>{{ year }}</p>
-    <p v-if="meanRating">Avaliação média: {{ meanRating.toFixed(1) }}</p>
-    <p v-else>Este filme não possui avaliações</p>
-    <rating-card :rating="rating" :movieId="id"></rating-card>
-    <router-link :to="'/movie/' + this.id" class="button-edit"
-      >Editar</router-link
-    >
-    <button @click="deleteMovie">apagar</button>
-  </section>
+    <base-dialog v-if="deletedMovie">
+      <template #default>
+        <p class="deleted">filme {{ this.name }} deletado com sucesso</p>
+      </template>
+    </base-dialog>
+    <section>
+      <h2>{{ name }}</h2>
+      <h3>{{ director }}</h3>
+      <p>{{ description }}</p>
+      <p class="year">{{ year }}</p>
+      <p v-if="meanRating">Avaliação média: {{ meanRating.toFixed(1) }}</p>
+      <p v-else>Este filme não possui avaliações</p>
+      <rating-card :rating="rating" :movieId="id"></rating-card>
+      <router-link :to="'/movie/' + this.id" class="button-edit"
+        >Editar</router-link
+      >
+      <button @click="deleteMovie">apagar</button>
+    </section>
+  </div>
 </template>
 
 <script>
-import axios from "axios";
 import RatingCard from "./RatingCard.vue";
+import api from "../../api.js";
 export default {
-  props: ["id", "name", "director", "year", "meanRating"],
+  props: ["id", "name", "director", "description", "year", "meanRating"],
 
   components: {
     RatingCard,
@@ -67,22 +70,18 @@ export default {
     },
     confirmDelete() {
       this.showModal = false;
-      axios
-        .delete("http://localhost:8080/movies/" + this.id, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        })
+      api
+        .deleteMovie(this.id)
         .then(() => {
           this.deletedMovie = true;
           console.log(this.deletedMovie);
           setTimeout(() => {
             this.deletedMovie = false;
             this.$emit("deleteMovie", this.id);
-          }, 2000);
+          }, 1500);
         })
         .catch((error) => {
-          console.log("erro deletar", error);
+          console.log("Erro ao deletar", error);
         });
     },
   },
@@ -119,6 +118,9 @@ h2,
 h3,
 p {
   margin: 0.5rem 0;
+}
+.year {
+  font-weight: bold;
 }
 
 h2 {

@@ -28,6 +28,16 @@
         v-model.trim="director"
       />
     </div>
+
+    <div class="form-control">
+      <label for="description">Descrição</label>
+      <textarea
+        id="description"
+        name="description"
+        type="textarea"
+        v-model.trim="description"
+      />
+    </div>
     <p v-if="yearCheckError">Data inválida.</p>
     <div class="form-control">
       <label for="year-movie">Ano de lançamento</label>
@@ -45,12 +55,14 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "../../api.js";
+
 export default {
   data() {
     return {
       movieName: "",
       director: "",
+      description: "",
       yearMovie: null,
       yearCheckError: false,
       createMovieCheck: false,
@@ -63,30 +75,24 @@ export default {
       if (this.yearMovie < 1900 || this.yearMovie > 2100) {
         this.yearCheckError = true;
       } else {
-        axios
-          .post(
-            "http://localhost:8080/movies",
-            {
-              name: this.movieName,
-              director: this.director,
-              year: this.yearMovie,
-            },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("token"),
-              },
-            }
-          )
+        const movieData = {
+          name: this.movieName,
+          description: this.description,
+          director: this.director,
+          year: this.yearMovie,
+        };
+
+        api
+          .createMovie(movieData)
           .then(() => {
             this.movieName = "";
             this.director = "";
             this.year = null;
             this.yearCheckError = false;
             this.createMovieCheck = false;
-            this.sucess = true;
+            this.success = true;
             setTimeout(() => {
-              this.sucess = false;
+              this.success = false;
               this.$router.push("/home");
             }, 2000);
           })
@@ -144,7 +150,7 @@ label {
 
 input {
   display: flex;
-  width: 60%;
+  width: 100%; /* Alterado para ocupar toda a largura */
   font: inherit;
   margin-top: 0.5rem;
   align-self: center;
@@ -166,5 +172,11 @@ button:hover,
 button:active {
   border-color: #002350;
   background-color: #002350;
+}
+
+@media (max-width: 768px) {
+  form {
+    max-width: 90%;
+  }
 }
 </style>

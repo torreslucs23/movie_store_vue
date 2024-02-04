@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "../../api.js";
 export default {
   data() {
     return {
@@ -81,21 +81,15 @@ export default {
         this.pass1CheckSpecial &&
         this.equalPasswords
       ) {
-        axios
-          .post("http://localhost:8080/user", {
-            username: this.userName,
-            password: this.password1,
-          })
+        const userData = {
+          username: this.userName,
+          password: this.password1,
+        };
+
+        api
+          .createUser(userData)
           .then(() => {
-            this.userName = "";
-            this.password1 = "";
-            this.password2 = "";
-            this.errorRegister = false;
-            this.createdUser = true;
-            setTimeout(() => {
-              this.createdUser = false;
-              this.$router.push("/auth");
-            }, 2000);
+            this.handleSuccessfulRegistration();
           })
           .catch(() => {
             this.errorRegister = true;
@@ -125,6 +119,19 @@ export default {
     checkPassword1Method() {
       this.checkLengthPassword();
       this.checkSpecialPassword();
+    },
+
+    handleSuccessfulRegistration() {
+      this.userName = "";
+      this.password1 = "";
+      this.password2 = "";
+      this.errorRegister = false;
+      this.createdUser = true;
+
+      setTimeout(() => {
+        this.createdUser = false;
+        this.$router.push("/auth");
+      }, 1500);
     },
     checkBothPasswords() {
       if (this.password1 != this.password2) {

@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "../../api.js";
 export default {
   emits: ["searchMovies"],
   data() {
@@ -29,17 +29,7 @@ export default {
           this.isEmpty = false;
         }
 
-        const response = await axios.get(
-          "http://localhost:8080/movies/byName?",
-          {
-            params: {
-              substring: this.input,
-            },
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-          }
-        );
+        const response = await api.searchMovies(this.input);
         this.$emit("searchMovies", {
           movies: response.data,
           isEmpty: this.isEmpty,
@@ -66,7 +56,7 @@ input {
   border-radius: 8px;
   border: 3px solid;
   flex-wrap: wrap;
-  width: 15%;
+  width: 10rem;
   height: 2.5em;
   font-size: 1em;
   font-style: italic;

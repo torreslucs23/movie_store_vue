@@ -1,10 +1,16 @@
 <template>
   <the-navigation></the-navigation>
-  <h1>Edit movie</h1>
-  <form @submit.prevent="submitForm">
-    <p v-if="createMovieCheck">Erro ao criar o filme. Tente novamente</p>
+  <base-dialog v-if="sucess">
+    <template #default>
+      <p class="sucess">Filme editado com sucesso!</p>
+    </template>
+  </base-dialog>
 
-    <h2>{{ movie.name }}</h2>
+  <form @submit.prevent="submitForm">
+    <h1>Editar Filme</h1>
+    <!-- <p v-if="createMovieCheck">Erro ao criar o filme. Tente novamente</p> -->
+
+    <h2>{{ movie }}</h2>
 
     <div class="form-control">
       <label for="director">Diretor</label>
@@ -12,7 +18,16 @@
         id="director"
         name="director"
         type="text"
-        v-model.trim="movie.director"
+        v-model.trim="director"
+      />
+    </div>
+    <div class="form-control">
+      <label for="description">Descrição</label>
+      <textarea
+        id="description"
+        name="description"
+        type="textarea"
+        v-model.trim="description"
       />
     </div>
     <p v-if="yearCheckError">Data inválida.</p>
@@ -24,32 +39,67 @@
         type="number"
         min="1900"
         max="2100"
-        v-model.trim="movie.year"
+        v-model.trim="year"
       />
     </div>
-    <button @submit="submitForm">Criar</button>
+    <button @submit="submitForm">Editar</button>
   </form>
 </template>
 
 <script>
-import axios from "axios";
+import api from "../../api.js";
 export default {
   data() {
     return {
-      movie: {},
+      movie: "",
+      director: "",
+      description: "",
+      year: null,
+      yearCheckError: false,
+      sucess: false,
     };
   },
-  mounted() {
-    const idMovie = this.$route.params.id;
-    axios
-      .get("http://localhost:8080/movies/" + idMovie, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      })
-      .then((response) => {
-        this.movie = response.data;
-      });
+  methods: {
+    submitForm() {
+      if (this.year < 1900 || this.year > 2100) {
+        this.yearCheckError = true;
+      } else {
+        const movieData = {
+          id: this.$route.params.id,
+          name: this.movie,
+          director: this.director,
+          description: this.description,
+          year: this.year,
+        };
+
+        api
+          .updateMovie(this.$route.params.id, movieData)
+          .then(() => {
+            this.success = true;
+            setTimeout(() => {
+              this.success = false;
+              this.$router.push("/home");
+            }, 2000);
+          })
+          .catch((error) => {
+            console.log("Erro na atualização do filme", error);
+          });
+      }
+    },
+    async fetchMovieDetails() {
+      try {
+        const response = await api.getMovieDetails(this.$route.params.id);
+        this.movie = response.data.name;
+        this.year = response.data.year;
+        this.director = response.data.director;
+        this.description = response.data.description;
+      } catch (error) {
+        console.log("Erro ao obter detalhes do filme", error);
+      }
+    },
+  },
+  created() {
+    this.fetchMovieDetails();
   },
 };
 </script>
