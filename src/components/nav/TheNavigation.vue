@@ -58,9 +58,9 @@ p {
 }
 header {
   width: 100%;
-  height: auto; /* Mudança: Altura automática para se ajustar ao conteúdo */
+  height: auto; 
   background-color: #11005c;
-  padding: 1rem; /* Mudança: Adicionado preenchimento para melhor aparência */
+  padding: 1rem; 
 }
 
 nav {
@@ -78,7 +78,7 @@ ul {
 }
 
 li {
-  margin: 0 1rem; /* Mudança: Reduzi a margem para melhor aparência em tamanhos menores */
+  margin: 0 1rem; 
 }
 
 a,
@@ -88,7 +88,7 @@ button {
   border: 1px solid transparent;
   cursor: pointer;
   color: white;
-  padding: 0.5rem 1rem; /* Mudança: Reduzi o preenchimento para melhor aparência em tamanhos menores */
+  padding: 0.5rem 1rem; 
   display: inline-block;
 }
 

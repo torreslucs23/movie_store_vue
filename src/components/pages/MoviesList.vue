@@ -15,6 +15,7 @@
             :year="movie.year"
             :meanRating="movie.meanRating"
             :description="movie.description"
+            :imgUrl="movie.imgUrl"
           ></movie-card>
         </transition-group>
       </ul>

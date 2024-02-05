@@ -33,7 +33,7 @@ const api = {
   deleteMovie: (movieId) => instance.delete(`/movies/${movieId}`),
 
   searchMovies: (substring) =>
-    instance.get("/movies/byName", { params: { substring } }),
+    instance.get("/movies/byName?", { params: { substring } }),
 
   createMovie: (movieData) => instance.post("/movies", movieData),
 

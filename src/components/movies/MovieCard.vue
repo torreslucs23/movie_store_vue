@@ -17,7 +17,7 @@
     </base-dialog>
     <section>
       <h2>{{ name }}</h2>
-      <img :src="moviePoster" alt="" />
+      <img :src="imgUrl" alt="" />
       <h3>{{ director }}</h3>
       <p>{{ description }}</p>
       <p class="year">{{ year }}</p>
@@ -35,9 +35,16 @@
 <script>
 import RatingCard from "./RatingCard.vue";
 import api from "../../api.js";
-import axios from "axios";
 export default {
-  props: ["id", "name", "director", "description", "year", "meanRating"],
+  props: [
+    "id",
+    "name",
+    "director",
+    "description",
+    "year",
+    "meanRating",
+    "imgUrl",
+  ],
 
   components: {
     RatingCard,
@@ -68,21 +75,6 @@ export default {
         params: { id: this.id },
       });
     },
-    async searchMoviePoster() {
-      try {
-        const response = await axios.get(
-          `http://www.omdbapi.com/?t=${this.name}&apikey=49e3f9e1`
-        );
-        if (response.data.Poster && response.data.Poster !== "N/A") {
-          this.moviePoster = response.data.Poster;
-        } else {
-          console.log(response.data);
-          console.log("imagem nao encontrada");
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    },
     closeModal() {
       this.showModal = false;
     },
@@ -102,9 +94,6 @@ export default {
           console.log("Erro ao deletar", error);
         });
     },
-  },
-  created() {
-    this.searchMoviePoster();
   },
 };
 </script>
@@ -224,6 +213,9 @@ button:hover {
 
   p {
     font-size: 12px;
+  }
+  img {
+    max-width: 80%;
   }
 }
 </style>

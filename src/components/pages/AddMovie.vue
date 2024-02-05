@@ -16,6 +16,7 @@
         name="movie-name"
         type="text"
         v-model.trim="movieName"
+        @blur="searchMoviePoster"
       />
     </div>
 
@@ -56,7 +57,7 @@
 
 <script>
 import api from "../../api.js";
-
+import axios from "axios";
 export default {
   data() {
     return {
@@ -67,38 +68,56 @@ export default {
       yearCheckError: false,
       createMovieCheck: false,
       sucess: false,
+      moviePoster: "",
     };
   },
 
   methods: {
-    submitForm() {
+    async submitForm() {
       if (this.yearMovie < 1900 || this.yearMovie > 2100) {
         this.yearCheckError = true;
       } else {
-        const movieData = {
-          name: this.movieName,
-          description: this.description,
-          director: this.director,
-          year: this.yearMovie,
-        };
+        try {
+          await this.searchMoviePoster();
+          const movieData = {
+            name: this.movieName,
+            description: this.description,
+            director: this.director,
+            year: this.yearMovie,
+            imgUrl: this.moviePoster,
+          };
 
-        api
-          .createMovie(movieData)
-          .then(() => {
-            this.movieName = "";
-            this.director = "";
-            this.year = null;
-            this.yearCheckError = false;
-            this.createMovieCheck = false;
-            this.success = true;
-            setTimeout(() => {
-              this.success = false;
-              this.$router.push("/home");
-            }, 2000);
-          })
-          .catch(() => {
-            this.createMovieCheck = true;
-          });
+          await api.createMovie(movieData);
+
+          this.movieName = "";
+          this.director = "";
+          this.description = "";
+          this.yearMovie = null;
+          this.yearCheckError = false;
+          this.createMovieCheck = false;
+          this.sucess = true;
+          setTimeout(() => {
+            this.sucess = false;
+            this.$router.push("/home");
+          }, 2000);
+        } catch (error) {
+          console.error("Erro durante o processo:", error);
+          this.createMovieCheck = true;
+        }
+      }
+    },
+    async searchMoviePoster() {
+      try {
+        const response = await axios.get(
+          `https://www.omdbapi.com/?t=${this.movieName}&apikey=49e3f9e1`
+        );
+        if (response.data.Poster && response.data.Poster !== "N/A") {
+          this.moviePoster = response.data.Poster;
+        } else {
+          console.log("imagem nao encontrada");
+        }
+      } catch (error) {
+        console.error(error);
       }
     },
   },
