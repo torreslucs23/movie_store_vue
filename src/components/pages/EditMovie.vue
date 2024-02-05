@@ -8,7 +8,6 @@
 
   <form @submit.prevent="submitForm">
     <h1>Editar Filme</h1>
-    <!-- <p v-if="createMovieCheck">Erro ao criar o filme. Tente novamente</p> -->
 
     <h2>{{ movie }}</h2>
 
@@ -109,11 +108,13 @@ p {
   color: red;
   font-size: 20px;
 }
+
 .sucess {
   color: black;
   font-size: 1.5rem;
   text-align: center;
 }
+
 h1 {
   font-weight: bold;
 }
@@ -122,6 +123,7 @@ h2 {
   display: flex;
   justify-content: center;
 }
+
 form {
   margin: 2rem auto;
   max-width: 20rem;
@@ -144,7 +146,7 @@ form {
 label {
   font-weight: bold;
   display: flex;
-  justify-content: center; /* Centraliza horizontalmente */
+  justify-content: center;
 }
 
 input {
@@ -171,5 +173,15 @@ button:hover,
 button:active {
   border-color: #002350;
   background-color: #002350;
+}
+
+@media (max-width: 768px) {
+  form {
+    width: 90%;
+  }
+
+  input {
+    width: 100%;
+  }
 }
 </style>

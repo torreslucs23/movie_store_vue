@@ -17,6 +17,7 @@
     </base-dialog>
     <section>
       <h2>{{ name }}</h2>
+      <img :src="moviePoster" alt="" />
       <h3>{{ director }}</h3>
       <p>{{ description }}</p>
       <p class="year">{{ year }}</p>
@@ -34,6 +35,7 @@
 <script>
 import RatingCard from "./RatingCard.vue";
 import api from "../../api.js";
+import axios from "axios";
 export default {
   props: ["id", "name", "director", "description", "year", "meanRating"],
 
@@ -47,6 +49,7 @@ export default {
       rating: 0,
       showModal: false,
       deletedMovie: false,
+      moviePoster: "",
     };
   },
   methods: {
@@ -64,6 +67,21 @@ export default {
         },
         params: { id: this.id },
       });
+    },
+    async searchMoviePoster() {
+      try {
+        const response = await axios.get(
+          `http://www.omdbapi.com/?t=${this.name}&apikey=49e3f9e1`
+        );
+        if (response.data.Poster && response.data.Poster !== "N/A") {
+          this.moviePoster = response.data.Poster;
+        } else {
+          console.log(response.data);
+          console.log("imagem nao encontrada");
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
     closeModal() {
       this.showModal = false;
@@ -85,17 +103,22 @@ export default {
         });
     },
   },
+  created() {
+    this.searchMoviePoster();
+  },
 };
 </script>
 
 <style scoped>
 section {
-  margin: 2rem auto;
+  margin: 1rem auto;
   max-width: 40rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: 12px;
+  align-items: center;
 }
+
 .deleted {
   color: black;
   font-size: 1.5rem;
@@ -103,13 +126,13 @@ section {
 }
 
 ul {
-  list-style-type: none; /* Remove os marcadores de lista */
+  list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
 li {
-  border: 1px solid #ddd; /* Adiciona uma borda ao item da lista */
+  border: 1px solid #ddd;
   margin-bottom: 10px;
   padding: 10px;
 }
@@ -119,6 +142,7 @@ h3,
 p {
   margin: 0.5rem 0;
 }
+
 .year {
   font-weight: bold;
 }
@@ -151,6 +175,7 @@ button,
   cursor: pointer;
   margin: 2px;
 }
+
 .button-edit {
   max-width: 5rem;
   text-decoration: none;
@@ -160,6 +185,7 @@ button,
 .button-edit:hover {
   background-color: rgb(2, 15, 15);
 }
+
 button:hover {
   background-color: #ff0000;
 }
@@ -181,5 +207,23 @@ button:hover {
   padding: 20px;
   border-radius: 5px;
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  section {
+    max-width: 80%;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  h3 {
+    font-size: 14px;
+  }
+
+  p {
+    font-size: 12px;
+  }
 }
 </style>

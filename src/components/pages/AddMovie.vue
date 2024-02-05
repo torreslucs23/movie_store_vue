@@ -145,12 +145,12 @@ form {
 label {
   font-weight: bold;
   display: flex;
-  justify-content: center; /* Centraliza horizontalmente */
+  justify-content: center;
 }
 
 input {
   display: flex;
-  width: 100%; /* Alterado para ocupar toda a largura */
+  width: 100%;
   font: inherit;
   margin-top: 0.5rem;
   align-self: center;

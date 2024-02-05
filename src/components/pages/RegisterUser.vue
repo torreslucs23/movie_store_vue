@@ -184,7 +184,7 @@ form {
 label {
   font-weight: bold;
   display: flex;
-  justify-content: center; /* Centraliza horizontalmente */
+  justify-content: center;
 }
 
 input {
@@ -221,5 +221,10 @@ button:active {
 .login-button:active {
   border-color: red;
   background-color: red;
+}
+@media (max-width: 500px) {
+  form {
+    max-width: 90%;
+  }
 }
 </style>

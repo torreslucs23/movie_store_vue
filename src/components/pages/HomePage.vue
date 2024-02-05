@@ -20,10 +20,5 @@ export default {
       searchedMovies: { movies: [], isEmpty: true },
     };
   },
-  methods: {
-    handleSearch(value) {
-      this.searchedMovies = value;
-    },
-  },
 };
 </script>

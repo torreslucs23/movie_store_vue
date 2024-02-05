@@ -95,9 +95,11 @@ p {
   color: red;
   font-size: 15px;
 }
+
 h1 {
   font-weight: bold;
 }
+
 form {
   margin: 2rem auto;
   max-width: 20rem;
@@ -116,6 +118,7 @@ form {
   flex-direction: column;
   align-items: center;
 }
+
 img {
   width: 7%;
   margin: 5px;
@@ -124,12 +127,12 @@ img {
 label {
   font-weight: bold;
   display: flex;
-  justify-content: center; /* Centraliza horizontalmente */
+  justify-content: center;
 }
 
 input {
   display: flex;
-  width: 7rem;
+  width: 100%;
   font: inherit;
   margin-top: 0.5rem;
   align-self: center;
@@ -158,14 +161,16 @@ button:active {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%; /* Garante que a largura seja 100% do container pai */
+  width: 100%;
 }
+
 .eye {
   position: absolute;
   right: 1px;
   cursor: pointer;
   width: 1rem;
 }
+
 .password-container {
   position: relative;
 }
@@ -179,5 +184,15 @@ button:active {
 .register-button:active {
   border-color: red;
   background-color: red;
+}
+
+@media (max-width: 768px) {
+  form {
+    max-width: 90%;
+  }
+
+  input {
+    width: 100%;
+  }
 }
 </style>
