@@ -53,6 +53,7 @@ export default {
       movie: "",
       director: "",
       description: "",
+      imgUrl: "",
       year: null,
       yearCheckError: false,
       sucess: false,
@@ -69,6 +70,7 @@ export default {
           director: this.director,
           description: this.description,
           year: this.year,
+          imgUrl: this.imgUrl,
         };
 
         api
@@ -92,6 +94,7 @@ export default {
         this.year = response.data.year;
         this.director = response.data.director;
         this.description = response.data.description;
+        this.imgUrl = response.data.imgUrl;
       } catch (error) {
         console.log("Erro ao obter detalhes do filme", error);
       }
