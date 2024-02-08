@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="cards">
     <base-dialog v-if="showModal" title="apagar filme" @close="closeModal">
       <template #default>
         <p>Tem certeza que quer excluir esse filme?</p>
@@ -19,7 +19,10 @@
       <h2>{{ name + "(" + year + ")" }}</h2>
       <img :src="imgUrl" alt="" />
       <h3>Diretor: {{ director }}</h3>
-      <p>{{ description }}</p>
+      <div class="description">
+        <p>{{ description }}</p>
+      </div>
+
       <p v-if="meanRating">Avaliação média: {{ meanRating.toFixed(1) }}</p>
       <p v-else>Este filme não possui avaliações</p>
       <rating-card :rating="rating" :movieId="id"></rating-card>
@@ -101,15 +104,26 @@ export default {
 </script>
 
 <style scoped>
-section {
+.cards {
   display: flex;
   flex-direction: column;
   margin: 1rem auto;
-  height: 32rem;
+  height: 30rem;
   width: 20rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   padding: 1.5rem;
   border-radius: 12px;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.cards:hover {
+  transform: scale(1.1);
+}
+
+section {
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
@@ -152,6 +166,7 @@ h3 {
 p {
   color: #777;
   font-size: 14px;
+  text-align: left;
 }
 
 button,
@@ -206,8 +221,20 @@ button:hover {
   text-align: center;
 }
 
+.description {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+}
+
 img {
-  max-width: 10rem;
+  max-width: 8rem;
+  transition: transform 0.3s ease;
+}
+
+img:hover {
+  transform: scale(1.5);
+  overflow: hidden;
 }
 
 @media (max-width: 768px) {

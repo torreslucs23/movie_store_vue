@@ -69,10 +69,14 @@ export default {
       equalPasswords: true,
       errorRegister: false,
       createdUser: false,
+      submit: false,
     };
   },
   methods: {
     submitForm() {
+      if (this.submit) {
+        return;
+      }
       if (
         this.userName &&
         this.password1 &&
@@ -92,9 +96,11 @@ export default {
             this.handleSuccessfulRegistration();
           })
           .catch(() => {
+            this.submit = false;
             this.errorRegister = true;
           });
       } else {
+        this.submit = false;
         this.errorRegister = true;
       }
     },

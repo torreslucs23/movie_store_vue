@@ -11,10 +11,10 @@
           <p>{{ username }}</p>
         </li>
         <li>
-          <router-link to="/home">Home</router-link>
+          <router-link to="/home">Principal</router-link>
         </li>
         <li>
-          <router-link to="/addMovie">Add Movie</router-link>
+          <router-link to="/addMovie">Add Filme</router-link>
         </li>
         <button @click="logout">Logout</button>
       </ul>
@@ -58,9 +58,16 @@ p {
 }
 header {
   width: 100%;
-  height: auto; 
-  background-color: #11005c;
-  padding: 1rem; 
+  height: auto;
+  background: rgb(64, 70, 10);
+  background: linear-gradient(
+    90deg,
+    rgba(64, 70, 10, 1) 2%,
+    rgba(42, 52, 69, 1) 9%,
+    rgba(17, 56, 92, 1) 63%,
+    rgba(92, 91, 26, 1) 100%
+  );
+  padding: 1rem;
 }
 
 nav {
@@ -78,7 +85,7 @@ ul {
 }
 
 li {
-  margin: 0 1rem; 
+  margin: 0 1rem;
 }
 
 a,
@@ -88,7 +95,7 @@ button {
   border: 1px solid transparent;
   cursor: pointer;
   color: white;
-  padding: 0.5rem 1rem; 
+  padding: 0.5rem 1rem;
   display: inline-block;
 }
 
@@ -97,9 +104,9 @@ a:active,
 button:hover,
 button:active,
 a.router-link-active {
-  color: #f1a80a;
-  border-color: #f1a80a;
-  background-color: #1a037e;
+  color: #fac758;
+  border-color: #56400f;
+  background-color: #0a0f1f;
 }
 
 @media (max-width: 768px) {

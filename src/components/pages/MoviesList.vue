@@ -1,9 +1,36 @@
 <template>
   <search-movie @searchMovies="handleSearch" :actualPage="page"></search-movie>
   <section>
-    <p v-if="isLoading === 'carregando'">carregando...</p>
+    <p v-if="isLoading === 'loading'">carregando...</p>
     <p v-if="notFound">Nenhum filme encontrado</p>
-    <div>
+
+    <div v-if="isLoading === 'loading'">
+      <ul>
+        <div
+          v-for="index in 4"
+          :key="index"
+          class="border-round border-1 surface-border p-4 surface-card loading"
+        >
+          <div class="flex mb-10" margin="2rem">
+            <div>
+              <skeleton-prime width="10rem" class="mb-5"></skeleton-prime>
+            </div>
+          </div>
+          <skeleton-prime width="8rem" height="12rem"></skeleton-prime>
+          <div class="flex justify-content-between mt-3">
+            <skeleton-prime width="10rem" class="mb-5"></skeleton-prime>
+            <skeleton-prime width="10rem" class="mb-5"></skeleton-prime>
+            <skeleton-prime width="10rem" class="mb-5"></skeleton-prime>
+
+            <div class="d-flex flex-row">
+              <skeleton-prime width="4rem" height="2rem"></skeleton-prime>
+              <skeleton-prime width="4rem" height="2rem"></skeleton-prime>
+            </div>
+          </div>
+        </div>
+      </ul>
+    </div>
+    <div v-else>
       <ul>
         <transition-group name="user-list">
           <movie-card
@@ -17,6 +44,7 @@
             :meanRating="movie.meanRating"
             :description="movie.description"
             :imgUrl="movie.imgUrl"
+            class="cards"
           ></movie-card>
         </transition-group>
       </ul>
@@ -44,7 +72,7 @@ export default {
   data() {
     return {
       movies: [],
-      isLoading: "carregando",
+      isLoading: "loading",
       notFound: false,
       page: 0,
       totalElements: 0,
@@ -53,6 +81,7 @@ export default {
   },
   watch: {
     async searchedMovies() {
+      this.isLoading = "loading";
       if (
         this.searchedMovies.movies.length === 0 &&
         this.searchedMovies.isEmpty === true
@@ -81,6 +110,7 @@ export default {
       this.movies.splice(resIndex, 1);
     },
     async fetchMovies(page) {
+      this.isLoading = "loading";
       try {
         const response = await api.getMovies(page, 4);
         this.page = page * 4;
@@ -104,6 +134,7 @@ export default {
       this.isLoading = "ok";
     },
     async pageHandle(paginator) {
+      this.isLoading = "loading";
       if (this.searchedMovies.inputSearch === "") {
         this.fetchMovies(paginator.page);
       } else {
@@ -134,6 +165,26 @@ p {
   display: flex;
   justify-content: center;
   font-size: 2rem;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+}
+.cards li {
+  width: 100%;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem auto;
+  height: 30rem;
+  width: 20rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  padding: 1.5rem;
+  border-radius: 12px;
+  align-items: center;
 }
 
 ul {

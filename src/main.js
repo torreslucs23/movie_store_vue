@@ -16,6 +16,7 @@ import TheNavigation from "./components/nav/TheNavigation.vue";
 import BaseDialog from "./components/UI/BaseDialog.vue";
 
 import "primevue/resources/themes/aura-light-green/theme.css";
+import Skeleton from "primevue/skeleton";
 
 const app = createApp(App);
 
@@ -23,11 +24,13 @@ app.component("the-navigation", TheNavigation);
 
 app.component("base-dialog", BaseDialog);
 
-app.component("Button-prime", Button);
+app.component("button-prime", Button);
 
 app.component("paginator-prime", Paginator);
 
 app.component("data-view", DataView);
+
+app.component("skeleton-prime", Skeleton);
 
 app.component("data-view-layout", DataViewLayoutOptions);
 

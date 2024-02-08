@@ -5,9 +5,9 @@
     </template>
   </base-dialog>
   <the-navigation></the-navigation>
-  <h2>Adicione um novo filme</h2>
 
   <form @submit.prevent="submitForm">
+    <h2>Adicionar Filme</h2>
     <p v-if="createMovieCheck">Erro ao criar o filme. Tente novamente</p>
     <div class="form-control">
       <label for="movie-name">Nome do filme</label>
@@ -19,6 +19,10 @@
         @blur="searchMoviePoster"
       />
     </div>
+
+    <button-prime @click="fetchImage">Gerar imagem</button-prime>
+
+    <img v-if="showImage" :src="showImage" alt="" />
 
     <div class="form-control">
       <label for="director">Diretor</label>
@@ -70,6 +74,7 @@ export default {
       sucess: false,
       moviePoster: "",
       submit: false,
+      showImage: "",
     };
   },
 
@@ -109,6 +114,20 @@ export default {
           console.error("Erro durante o processo:", error);
           this.createMovieCheck = true;
         }
+      }
+    },
+    async fetchImage() {
+      try {
+        const response = await axios.get(
+          `https://www.omdbapi.com/?t=${this.movieName}&apikey=49e3f9e1`
+        );
+        if (response.data.Poster && response.data.Poster !== "N/A") {
+          this.showImage = response.data.Poster;
+        } else {
+          console.log("imagem nao e ncontrada");
+        }
+      } catch (error) {
+        console.error(error);
       }
     },
     async searchMoviePoster() {
@@ -178,6 +197,11 @@ input {
   font: inherit;
   margin-top: 0.5rem;
   align-self: center;
+}
+
+img {
+  margin: 1rem;
+  max-width: 12rem;
 }
 
 button {
