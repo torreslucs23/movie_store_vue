@@ -11,13 +11,10 @@
       </p>
       <h2>Registrar-se</h2>
       <div class="form-control">
-        <label for="username">Digite um nome de usuário</label>
-        <input
-          type="text"
-          name="username"
-          id="username"
-          v-model.trim="userName"
-        />
+        <float-label-prime class="float-input">
+          <InputText id="username" type="text" v-model.trim="userName" />
+          <label for="username">Nome do usuário</label>
+        </float-label-prime>
       </div>
       <p v-if="pass1CheckLength === false">
         Senha deve conter pelo menos 6 caracteres
@@ -26,27 +23,29 @@
         Deve conter pelo menos um caractere especial
       </p>
       <div class="form-control">
-        <label for="password1">Digite uma senha</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          v-model="password1"
-          @blur="checkPassword1Method"
-        />
+        <float-label-prime class="float-input">
+          <InputText
+            id="password"
+            type="password"
+            v-model.trim="password1"
+            @blur="checkPassword1Method"
+          />
+          <label for="password">Digite uma senha</label>
+        </float-label-prime>
       </div>
 
       <p v-if="equalPasswords === false">As senhas estão diferentes</p>
 
       <div class="form-control">
-        <label for="password2">Digite a senha novamente</label>
-        <input
-          type="password"
-          name="password2"
-          id="password2"
-          v-model="password2"
-          @blur="checkBothPasswords"
-        />
+        <float-label-prime class="float-input">
+          <InputText
+            id="password2"
+            type="password"
+            v-model.trim="password2"
+            @blur="checkBothPasswords"
+          />
+          <label for="password2">Digite a senha novamente</label>
+        </float-label-prime>
       </div>
       <button>Registrar</button>
       <button class="login-button" @click="this.$router.push('/auth')">
@@ -193,9 +192,10 @@ label {
   justify-content: center;
 }
 
-input {
+input,
+.float-input {
   display: flex;
-  width: 60%;
+  width: 100%;
   font: inherit;
   margin-top: 0.5rem;
   align-self: center;

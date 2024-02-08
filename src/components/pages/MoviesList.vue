@@ -1,7 +1,7 @@
 <template>
   <search-movie @searchMovies="handleSearch" :actualPage="page"></search-movie>
   <section>
-    <p v-if="isLoading === 'loading'">carregando...</p>
+    <sppiner-prime class="p" v-if="isLoading === 'loading'"></sppiner-prime>
     <p v-if="notFound">Nenhum filme encontrado</p>
 
     <div v-if="isLoading === 'loading'">
@@ -161,7 +161,8 @@ export default {
 </script>
 
 <style scoped>
-p {
+p,
+.p {
   display: flex;
   justify-content: center;
   font-size: 2rem;

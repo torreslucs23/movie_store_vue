@@ -3,6 +3,8 @@ import App from "./App.vue";
 import router from "./router";
 import PrimeVue from "primevue/config";
 
+import "primeicons/primeicons.css";
+
 import DataView from "primevue/dataview";
 import DataViewLayoutOptions from "primevue/dataviewlayoutoptions"; // optional
 
@@ -12,11 +14,19 @@ import Button from "primevue/button";
 
 import InputText from "primevue/inputtext";
 
+import Textarea from "primevue/textarea";
+
 import TheNavigation from "./components/nav/TheNavigation.vue";
 import BaseDialog from "./components/UI/BaseDialog.vue";
 
+import InputNumber from "primevue/inputnumber";
+
 import "primevue/resources/themes/aura-light-green/theme.css";
 import Skeleton from "primevue/skeleton";
+
+import ProgressSpinner from "primevue/progressspinner";
+
+import FloatLabel from "primevue/floatlabel";
 
 const app = createApp(App);
 
@@ -33,6 +43,14 @@ app.component("data-view", DataView);
 app.component("skeleton-prime", Skeleton);
 
 app.component("data-view-layout", DataViewLayoutOptions);
+
+app.component("float-label-prime", FloatLabel);
+
+app.component("sppiner-prime", ProgressSpinner);
+
+app.component("text-area-prime", Textarea);
+
+app.component("input-number-prime", InputNumber);
 
 app.use(router);
 

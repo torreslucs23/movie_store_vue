@@ -4,30 +4,27 @@
       <p v-if="erroAuth">Erro na autenticação. Insira os dados novamente</p>
       <h1>Entrar</h1>
       <div class="form-control">
-        <label for="user-name">Username</label>
-        <input
-          id="user-name"
-          name="user-name"
-          type="text"
-          v-model.trim="userName"
-        />
+        <float-label-prime>
+          <InputText id="username" type="text" v-model.trim="userName" />
+          <label for="username">Nome do usuário</label>
+        </float-label-prime>
       </div>
 
       <div class="password-container">
         <div class="form-control">
-          <label for="password">Password</label>
           <div class="div-password-container">
-            <input
-              id="password"
-              name="password"
-              :type="typePassword"
-              v-model.trim="password"
-            />
-            <img
+            <float-label-prime>
+              <InputText
+                id="password"
+                :type="typePassword"
+                v-model.trim="password"
+              />
+              <label for="password">Senha</label>
+            </float-label-prime>
+            <i
               @mouseover="showPassword"
               @mouseleave="hidePassword"
-              src="../../assets/olho.png"
-              class="eye"
+              class="pi pi-eye app-eye"
             />
           </div>
         </div>
@@ -158,13 +155,14 @@ button:active {
 }
 
 .div-password-container {
+  margin-top: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
 }
 
-.eye {
+.app-eye {
   position: absolute;
   right: 1px;
   cursor: pointer;
