@@ -69,11 +69,16 @@ export default {
       createMovieCheck: false,
       sucess: false,
       moviePoster: "",
+      submit: false,
     };
   },
 
   methods: {
     async submitForm() {
+      if (this.submit === true) {
+        return;
+      }
+      this.submit = true;
       if (this.yearMovie < 1900 || this.yearMovie > 2100) {
         this.yearCheckError = true;
       } else {
@@ -114,7 +119,7 @@ export default {
         if (response.data.Poster && response.data.Poster !== "N/A") {
           this.moviePoster = response.data.Poster;
         } else {
-          console.log("imagem nao encontrada");
+          console.log("imagem nao e ncontrada");
         }
       } catch (error) {
         console.error(error);

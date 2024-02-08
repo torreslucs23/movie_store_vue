@@ -16,18 +16,20 @@
       </template>
     </base-dialog>
     <section>
-      <h2>{{ name }}</h2>
+      <h2>{{ name + "(" + year + ")" }}</h2>
       <img :src="imgUrl" alt="" />
-      <h3>{{ director }}</h3>
+      <h3>Diretor: {{ director }}</h3>
       <p>{{ description }}</p>
-      <p class="year">{{ year }}</p>
       <p v-if="meanRating">Avaliação média: {{ meanRating.toFixed(1) }}</p>
       <p v-else>Este filme não possui avaliações</p>
       <rating-card :rating="rating" :movieId="id"></rating-card>
-      <router-link :to="'/movie/' + this.id" class="button-edit"
-        >Editar</router-link
-      >
-      <button @click="deleteMovie">apagar</button>
+
+      <div class="button-container">
+        <router-link :to="'/movie/' + this.id" class="button-edit"
+          >Editar</router-link
+        >
+        <button @click="deleteMovie">apagar</button>
+      </div>
     </section>
   </div>
 </template>
@@ -100,8 +102,11 @@ export default {
 
 <style scoped>
 section {
+  display: flex;
+  flex-direction: column;
   margin: 1rem auto;
-  max-width: 40rem;
+  height: 32rem;
+  width: 20rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   padding: 1.5rem;
   border-radius: 12px;
@@ -130,10 +135,7 @@ h2,
 h3,
 p {
   margin: 0.5rem 0;
-}
-
-.year {
-  font-weight: bold;
+  text-align: center;
 }
 
 h2 {
@@ -171,6 +173,12 @@ button,
   background-color: rgb(45, 93, 93);
 }
 
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .button-edit:hover {
   background-color: rgb(2, 15, 15);
 }
@@ -198,6 +206,10 @@ button:hover {
   text-align: center;
 }
 
+img {
+  max-width: 10rem;
+}
+
 @media (max-width: 768px) {
   section {
     max-width: 80%;
@@ -213,9 +225,6 @@ button:hover {
 
   p {
     font-size: 12px;
-  }
-  img {
-    max-width: 80%;
   }
 }
 </style>

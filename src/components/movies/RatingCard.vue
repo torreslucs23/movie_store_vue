@@ -5,31 +5,33 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
   />
 
-  <span
-    @click="submitStar(1)"
-    class="fa fa-star"
-    :class="star >= 1 ? 'checked' : 'none'"
-  ></span>
-  <span
-    @click="submitStar(2)"
-    class="fa fa-star"
-    :class="star >= 2 ? 'checked' : 'none'"
-  ></span>
-  <span
-    @click="submitStar(3)"
-    class="fa fa-star"
-    :class="star >= 3 ? 'checked' : 'none'"
-  ></span>
-  <span
-    @click="submitStar(4)"
-    class="fa fa-star"
-    :class="star >= 4 ? 'checked' : 'none'"
-  ></span>
-  <span
-    @click="submitStar(5)"
-    class="fa fa-star"
-    :class="star >= 5 ? 'checked' : 'none'"
-  ></span>
+  <div>
+    <span
+      @click="submitStar(1)"
+      class="fa fa-star"
+      :class="star >= 1 ? 'checked' : 'none'"
+    ></span>
+    <span
+      @click="submitStar(2)"
+      class="fa fa-star"
+      :class="star >= 2 ? 'checked' : 'none'"
+    ></span>
+    <span
+      @click="submitStar(3)"
+      class="fa fa-star"
+      :class="star >= 3 ? 'checked' : 'none'"
+    ></span>
+    <span
+      @click="submitStar(4)"
+      class="fa fa-star"
+      :class="star >= 4 ? 'checked' : 'none'"
+    ></span>
+    <span
+      @click="submitStar(5)"
+      class="fa fa-star"
+      :class="star >= 5 ? 'checked' : 'none'"
+    ></span>
+  </div>
 </template>
 
 <script>

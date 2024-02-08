@@ -1,4 +1,5 @@
 <template>
+  <search-movie @searchMovies="handleSearch" :actualPage="page"></search-movie>
   <section>
     <p v-if="isLoading === 'carregando'">carregando...</p>
     <p v-if="notFound">Nenhum filme encontrado</p>
@@ -21,21 +22,33 @@
       </ul>
     </div>
   </section>
+  <paginator-prime
+    v-model:first="page"
+    :rows="4"
+    :totalRecords="totalElements"
+    :alwaysShow="false"
+    @page="pageHandle"
+  ></paginator-prime>
 </template>
 
 <script>
 import MovieCard from "../movies/MovieCard.vue";
 import api from "../../api.js";
+import SearchMovie from "../movies/SearchMovie.vue";
 export default {
   components: {
     MovieCard,
+    SearchMovie,
   },
-  props: ["searchedMovies"],
+
   data() {
     return {
       movies: [],
       isLoading: "carregando",
       notFound: false,
+      page: 0,
+      totalElements: 0,
+      searchedMovies: { movies: [], isEmpty: true, total: 0, inputSearch: "" },
     };
   },
   watch: {
@@ -45,28 +58,34 @@ export default {
         this.searchedMovies.isEmpty === true
       ) {
         try {
-          const response = await api.getAllMovies();
-          this.handleMoviesResponse(response.data);
+          this.page = 0;
+          const response = await api.getMovies(0, 4);
+          this.totalElements = response.data.totalElements;
+          this.handleMoviesResponse(response.data.content);
         } catch (error) {
           console.error(error);
         }
       } else {
+        this.page = 0;
+        this.totalElements = this.searchedMovies.total;
         this.handleMoviesResponse(this.searchedMovies.movies);
       }
     },
-    movies() {
-      this.movies = this.movies.reverse();
-    },
   },
   methods: {
+    handleSearch(value) {
+      this.searchedMovies = value;
+    },
     deleteMovie(value) {
       const resIndex = this.movies.findIndex((res) => res.id === value);
       this.movies.splice(resIndex, 1);
     },
-    async fetchMovies() {
+    async fetchMovies(page) {
       try {
-        const response = await api.getAllMovies();
-        this.movies = response.data;
+        const response = await api.getMovies(page, 4);
+        this.page = page * 4;
+        this.movies = response.data.content;
+        this.totalElements = parseInt(response.data.totalElements);
         this.isLoading = "ok";
         this.notFound = false;
       } catch (error) {
@@ -84,10 +103,28 @@ export default {
 
       this.isLoading = "ok";
     },
+    async pageHandle(paginator) {
+      if (this.searchedMovies.inputSearch === "") {
+        this.fetchMovies(paginator.page);
+      } else {
+        try {
+          const response = await api.searchMovies(
+            this.searchedMovies.inputSearch,
+            paginator.page,
+            4
+          );
+          const data = response.data.content;
+          this.page = paginator.page * 4;
+          this.handleMoviesResponse(data);
+        } catch (error) {
+          console.error("erro aqui", error);
+        }
+      }
+    },
   },
 
-  created() {
-    this.fetchMovies();
+  mounted() {
+    this.fetchMovies(0);
   },
 };
 </script>
@@ -97,6 +134,11 @@ p {
   display: flex;
   justify-content: center;
   font-size: 2rem;
+}
+
+ul {
+  display: flex;
+  flex-direction: row;
 }
 
 .user-list-enter-from {

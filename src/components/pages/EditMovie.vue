@@ -76,9 +76,9 @@ export default {
         api
           .updateMovie(this.$route.params.id, movieData)
           .then(() => {
-            this.success = true;
+            this.sucess = true;
             setTimeout(() => {
-              this.success = false;
+              this.sucess = false;
               this.$router.push("/home");
             }, 2000);
           })

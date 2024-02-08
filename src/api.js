@@ -19,7 +19,8 @@ instance.interceptors.request.use(
 );
 
 const api = {
-  getMovies: () => instance.get("/movies"),
+  getMovies: (page, size) =>
+    instance.get("/movies", { params: { page, size } }),
 
   postReview: (movieId, userId, rating) =>
     instance.post("/reviews", { movieId, userId, rating }),
@@ -32,8 +33,8 @@ const api = {
 
   deleteMovie: (movieId) => instance.delete(`/movies/${movieId}`),
 
-  searchMovies: (substring) =>
-    instance.get("/movies/byName?", { params: { substring } }),
+  searchMovies: (substring, page, size) =>
+    instance.get("/movies/byName?", { params: { substring, page, size } }),
 
   createMovie: (movieData) => instance.post("/movies", movieData),
 
@@ -45,8 +46,6 @@ const api = {
     instance.put(`/movies/${movieId}`, movieData),
 
   getMovieDetails: (movieId) => instance.get(`/movies/${movieId}`),
-
-  getAllMovies: () => instance.get("/movies"),
 };
 
 export default api;

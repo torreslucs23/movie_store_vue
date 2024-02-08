@@ -10,9 +10,10 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "../../api.js";
 export default {
   emits: ["searchMovies"],
+  props: ["actualPage"],
   data() {
     return {
       input: "",
@@ -25,27 +26,31 @@ export default {
         await this.$nextTick();
         if (this.input === "") {
           this.isEmpty = true;
+          this.$emit("searchMovies", {
+            movies: [],
+            isEmpty: true,
+            inputSearch: "",
+          });
+          return;
         } else {
           this.isEmpty = false;
         }
 
-        const response = await axios.get(
-          "http://localhost:8080/movies/byName?",
-          {
-            params: {
-              substring: this.input,
-            },
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-          }
-        );
+        const response = await api.searchMovies(this.input, 0, 4);
         this.$emit("searchMovies", {
-          movies: response.data,
+          movies: response.data.content,
           isEmpty: this.isEmpty,
+          total: response.data.totalElements,
+          inputSearch: this.input,
         });
       } catch (error) {
         console.log(error);
+        this.$emit("searchMovies", {
+          movies: [],
+          isEmpty: this.isEmpty,
+          total: 0,
+          inputSearch: this.input,
+        });
       }
     },
   },
