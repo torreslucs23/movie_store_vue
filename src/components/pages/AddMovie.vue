@@ -147,6 +147,7 @@ export default {
         }
       }
     },
+
     async fetchImage() {
       try {
         const response = await axios.get(
@@ -156,8 +157,9 @@ export default {
           this.showImage = response.data.Poster;
           this.hasImage = "ok";
           this.urlNewImg = "";
+          this.moviePoster = response.data.Poster;
         } else {
-          console.log("imagem nao e ncontrada");
+          console.log("imagem nao encontrada");
           this.hasImage = "notFound";
         }
       } catch (error) {
