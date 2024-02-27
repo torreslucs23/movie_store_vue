@@ -6,9 +6,14 @@
   </base-dialog>
   <the-navigation></the-navigation>
 
+  <div v-if="isLoading === 'loading'" class="spinner-div">
+    <sppiner-prime class="p spinner"></sppiner-prime>
+  </div>
+
   <form @submit.prevent="submitForm">
     <h2>Adicionar Filme</h2>
     <p v-if="createMovieCheck">Erro ao criar o filme. Tente novamente</p>
+    <p v-if="checkMovieName">Nome de filme vazio não é válido</p>
     <div class="form-control">
       <float-label-prime>
         <InputText
@@ -25,7 +30,11 @@
       >Gerar imagem</button-prime
     >
 
-    <img v-if="hasImage === 'ok'" :src="showImage" alt="" />
+    <img
+      v-if="hasImage === 'ok'"
+      :src="showImage"
+      alt="Imagem não encontrada"
+    />
 
     <h5 v-else-if="hasImage === 'empty'">Sem imagem</h5>
 
@@ -51,6 +60,8 @@
       </button-prime>
     </div>
 
+    <p v-if="checkDirector">Campo diretor vazio não é válido</p>
+
     <div class="form-control">
       <float-label-prime>
         <InputText
@@ -63,6 +74,7 @@
       </float-label-prime>
     </div>
 
+    <p v-if="checkDescription">Campo descrição vazio não é válido</p>
     <div class="form-control">
       <label for="description">Descrição</label>
       <text-area-prime v-model.trim="description" rows="5" cols="20" />
@@ -91,8 +103,11 @@ export default {
   data() {
     return {
       movieName: "",
+      checkMovieName: false,
       director: "",
+      checkDirector: false,
       description: "",
+      checkDescription: false,
       yearMovie: null,
       yearCheckError: false,
       createMovieCheck: false,
@@ -102,6 +117,9 @@ export default {
       showImage: "",
       hasImage: "empty",
       urlNewImg: "",
+      errorImg: false,
+      blockGenerateImage: false,
+      isLoading: "empty",
     };
   },
 
@@ -115,6 +133,15 @@ export default {
       if (this.submit === true) {
         return;
       }
+      this.checkInput();
+      if (
+        this.checkDescription === true ||
+        this.checkDirector === true ||
+        this.checkMovieName === true
+      ) {
+        return null;
+      }
+      this.isLoading = "loading";
       this.submit = true;
       if (this.yearMovie < 1900 || this.yearMovie > 2100) {
         this.yearCheckError = true;
@@ -137,18 +164,29 @@ export default {
           this.yearCheckError = false;
           this.createMovieCheck = false;
           this.sucess = true;
+
           setTimeout(() => {
+            this.isLoading = false;
             this.sucess = false;
             this.$router.push("/home");
           }, 2000);
         } catch (error) {
           console.error("Erro durante o processo:", error);
           this.createMovieCheck = true;
+          this.isLoading = false;
         }
       }
     },
-
+    checkInput() {
+      this.checkMovieName = this.movieName === "";
+      this.checkDirector = this.director === "";
+      this.checkDescription = this.description === "";
+    },
     async fetchImage() {
+      if (this.blockGenerateImage === true) {
+        return;
+      }
+      this.blockGenerateImage = true;
       try {
         const response = await axios.get(
           `https://www.omdbapi.com/?t=${this.movieName}&apikey=49e3f9e1`
@@ -158,9 +196,12 @@ export default {
           this.hasImage = "ok";
           this.urlNewImg = "";
           this.moviePoster = response.data.Poster;
+          this.blockGenerateImage = false;
+          this.urlNewImg = response.data.Poster;
         } else {
           console.log("imagem nao encontrada");
           this.hasImage = "notFound";
+          this.blockGenerateImage = false;
         }
       } catch (error) {
         console.error(error);
@@ -243,6 +284,33 @@ button:hover,
 button:active {
   border-color: #002350;
   background-color: #002350;
+}
+
+.spinner-div {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 10;
+}
+
+.p {
+  display: flex;
+  justify-content: center;
+  font-size: 2rem;
+}
+.spinner {
+  position: fixed;
+  top: 20vh;
+  left: 10%;
+  width: 80%;
+  z-index: 100;
+  border-radius: 12px;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
 @media (max-width: 768px) {

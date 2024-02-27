@@ -1,12 +1,22 @@
 <template>
   <div class="cards">
-    <base-dialog v-if="showModal" title="apagar filme" @close="closeModal">
+    <base-dialog
+      v-if="showModal === true && error === false"
+      title="apagar filme"
+      @close="closeModal"
+    >
       <template #default>
         <p>Tem certeza que quer excluir esse filme?</p>
       </template>
       <template #actions>
         <button @click="confirmDelete">Sim</button>
         <button @click="closeModal">não</button>
+      </template>
+    </base-dialog>
+
+    <base-dialog v-if="error" title="apagar filme" @close="closeModal">
+      <template #default>
+        <p>Erro ao apagar filme</p>
       </template>
     </base-dialog>
 
@@ -62,6 +72,7 @@ export default {
       showModal: false,
       deletedMovie: false,
       moviePoster: "",
+      error: false,
     };
   },
   methods: {
@@ -89,7 +100,6 @@ export default {
         .deleteMovie(this.id)
         .then(() => {
           this.deletedMovie = true;
-          console.log(this.deletedMovie);
           setTimeout(() => {
             this.deletedMovie = false;
             this.$emit("deleteMovie", this.id);
@@ -97,6 +107,11 @@ export default {
         })
         .catch((error) => {
           console.log("Erro ao deletar", error);
+          this.error = true;
+          setTimeout(() => {
+            this.error = false;
+            this.$router.push("/");
+          }, 1500);
         });
     },
   },

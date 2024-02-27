@@ -19,8 +19,8 @@ instance.interceptors.request.use(
 );
 
 const api = {
-  getMovies: (page, size) =>
-    instance.get("/movies", { params: { page, size } }),
+  getMovies: (substring, page, size) =>
+    instance.get("/movies", { params: { page, size, substring } }),
 
   postReview: (movieId, userId, rating) =>
     instance.post("/reviews", { movieId, userId, rating }),

@@ -68,7 +68,7 @@ export default {
         })
         .catch((error) => {
           console.log("Erro na autenticação", error.response);
-          this.authError = true;
+          this.erroAuth = true;
         });
     },
     showPassword() {
@@ -164,7 +164,7 @@ button:active {
 
 .app-eye {
   position: absolute;
-  right: 1px;
+  right: 4px;
   cursor: pointer;
   width: 1rem;
 }

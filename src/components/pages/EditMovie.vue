@@ -6,10 +6,16 @@
     </template>
   </base-dialog>
 
+  <div v-if="isLoading === 'loading'" class="spinner-div">
+    <sppiner-prime class="p spinner"></sppiner-prime>
+  </div>
+
   <form @submit.prevent="submitForm">
     <h1>Editar Filme</h1>
 
     <h2>{{ movie }}</h2>
+
+    <p v-if="checkDirector">Campo diretor vazio não é válido</p>
 
     <div class="form-control">
       <float-label-prime class="input">
@@ -23,7 +29,9 @@
       </float-label-prime>
     </div>
 
-    <img :src="showImg" alt="" />
+    <!-- <p v-if="errorImg === true">imagem não encontrada</p> -->
+
+    <img :src="showImg" class="alt-image" alt="imagem não encontrada" />
 
     <div class="form-control">
       <float-label-prime>
@@ -41,6 +49,7 @@
       </button-prime>
     </div>
 
+    <p v-if="checkDescription">Campo descrição vazio não é válido</p>
     <div class="form-control">
       <label for="description">Descrição</label>
       <text-area-prime v-model.trim="description" rows="5" cols="20" />
@@ -68,19 +77,29 @@ export default {
   data() {
     return {
       movie: "",
+      checkMovieName: false,
       director: "",
+      checkDirector: false,
       description: "",
+      checkDescription: false,
       imgUrl: "",
       year: null,
       yearCheckError: false,
       sucess: false,
       showImg: "",
       urlNewImg: "",
+      errorImg: false,
       submit: false,
+      isLoading: "empty",
     };
   },
+
   methods: {
+    errorImgLoad() {
+      this.errorImg = true;
+    },
     changeImg() {
+      this.errorImg = false;
       if (this.urlNewImg === "") {
         this.showImg = this.imgUrl;
       } else {
@@ -91,6 +110,15 @@ export default {
       if (this.submit === true) {
         return;
       }
+      this.checkInput();
+      if (
+        this.checkDescription === true ||
+        this.checkDirector === true ||
+        this.checkMovieName === true
+      ) {
+        return null;
+      }
+      this.isLoading = "loading";
       this.submit = true;
       if (this.year < 1900 || this.year > 2100) {
         this.yearCheckError = true;
@@ -111,13 +139,20 @@ export default {
             setTimeout(() => {
               this.sucess = false;
               this.submit = false;
+              this.isLoading = "empty";
               this.$router.push("/home");
             }, 2000);
           })
           .catch((error) => {
             console.log("Erro na atualização do filme", error);
+            this.isLoading = "empty";
           });
       }
+    },
+    checkInput() {
+      this.checkMovieName = this.movie === "";
+      this.checkDirector = this.director === "";
+      this.checkDescription = this.description === "";
     },
     async fetchMovieDetails() {
       try {
@@ -128,12 +163,14 @@ export default {
         this.description = response.data.description;
         this.imgUrl = response.data.imgUrl;
         this.showImg = response.data.imgUrl;
+        this.urlNewImg = response.data.imgUrl;
+        this.changeImg();
       } catch (error) {
         console.log("Erro ao obter detalhes do filme", error);
       }
     },
   },
-  created() {
+  mounted() {
     this.fetchMovieDetails();
   },
 };
@@ -143,6 +180,11 @@ export default {
 p {
   color: red;
   font-size: 20px;
+}
+
+.alt-image {
+  font-size: 1em;
+  color: black;
 }
 .sucess {
   color: black;
@@ -206,6 +248,33 @@ button {
   border-radius: 30px;
   margin-top: 0.5rem;
   align-self: center;
+}
+
+.spinner-div {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 10;
+}
+
+.p {
+  display: flex;
+  justify-content: center;
+  font-size: 2rem;
+}
+.spinner {
+  position: fixed;
+  top: 20vh;
+  left: 10%;
+  width: 80%;
+  z-index: 100;
+  border-radius: 12px;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
 button:hover,

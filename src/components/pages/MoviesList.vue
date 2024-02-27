@@ -5,11 +5,11 @@
     <p v-if="notFound">Nenhum filme encontrado</p>
 
     <div v-if="isLoading === 'loading'">
-      <ul>
+      <ul class="movie-list">
         <div
           v-for="index in 4"
           :key="index"
-          class="border-round border-1 surface-border p-4 surface-card loading"
+          class="border-round border-1 surface-border p-4 surface-card loading cards"
         >
           <div class="flex mb-10" margin="2rem">
             <div>
@@ -31,7 +31,7 @@
       </ul>
     </div>
     <div v-else>
-      <ul>
+      <ul class="movie-list">
         <transition-group name="user-list">
           <movie-card
             @deleteMovie="deleteMovie"
@@ -63,6 +63,7 @@
 import MovieCard from "../movies/MovieCard.vue";
 import api from "../../api.js";
 import SearchMovie from "../movies/SearchMovie.vue";
+
 export default {
   components: {
     MovieCard,
@@ -88,7 +89,7 @@ export default {
       ) {
         try {
           this.page = 0;
-          const response = await api.getMovies(0, 4);
+          const response = await api.getMovies("", 0, 4);
           this.totalElements = response.data.totalElements;
           this.handleMoviesResponse(response.data.content);
         } catch (error) {
@@ -112,7 +113,7 @@ export default {
     async fetchMovies(page) {
       this.isLoading = "loading";
       try {
-        const response = await api.getMovies(page, 4);
+        const response = await api.getMovies("", page, 4);
         this.page = page * 4;
         this.movies = response.data.content;
         this.totalElements = parseInt(response.data.totalElements);
@@ -133,13 +134,18 @@ export default {
 
       this.isLoading = "ok";
     },
+
+    showNewMovieDialog(movie) {
+      alert(`Novo Filme Adicionado: ${movie}`);
+    },
+
     async pageHandle(paginator) {
       this.isLoading = "loading";
       if (this.searchedMovies.inputSearch === "") {
         this.fetchMovies(paginator.page);
       } else {
         try {
-          const response = await api.searchMovies(
+          const response = await api.getMovies(
             this.searchedMovies.inputSearch,
             paginator.page,
             4
@@ -154,7 +160,7 @@ export default {
     },
   },
 
-  mounted() {
+  created() {
     this.fetchMovies(0);
   },
 };
@@ -168,12 +174,30 @@ p,
   font-size: 2rem;
 }
 
-.cards {
+.movie-list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
-.cards li {
-  width: 100%;
+
+.cards {
+  width: calc(25% - 20px);
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .cards {
+    width: calc(50% - 20px); /* 2 elementos por linha em telas menores */
+  }
+}
+
+@media (max-width: 600px) {
+  .cards {
+    width: calc(75% - 20px); /* 2 elementos por linha em telas menores */
+  }
 }
 
 .loading {

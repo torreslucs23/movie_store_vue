@@ -2,6 +2,8 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import PrimeVue from "primevue/config";
+import Toast from "primevue/toast";
+import ToastService from "primevue/toastservice";
 
 import "primeicons/primeicons.css";
 
@@ -51,6 +53,10 @@ app.component("sppiner-prime", ProgressSpinner);
 app.component("text-area-prime", Textarea);
 
 app.component("input-number-prime", InputNumber);
+
+app.component("toast-prime", Toast);
+
+app.use(ToastService);
 
 app.use(router);
 

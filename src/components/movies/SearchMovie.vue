@@ -18,6 +18,7 @@ export default {
     return {
       input: "",
       isEmpty: true,
+      controller: "",
     };
   },
   methods: {
@@ -35,8 +36,14 @@ export default {
         } else {
           this.isEmpty = false;
         }
+        if (this.controller) {
+          this.controller.abort();
+        }
 
-        const response = await api.searchMovies(this.input, 0, 4);
+        this.controller = new AbortController();
+        const signal = this.controller.signal;
+
+        const response = await api.getMovies(this.input, 0, 4, signal);
         this.$emit("searchMovies", {
           movies: response.data.content,
           isEmpty: this.isEmpty,
